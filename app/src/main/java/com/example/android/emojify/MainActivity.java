@@ -185,6 +185,13 @@ public class MainActivity extends AppCompatActivity {
         mResultsBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
 
         // TODO (3): Call the new detectFaces() method, passing in the resampled bitmap to detect the faces in the picture.
+        int numberOfFaces = Emojifier.detectFaces(mResultsBitmap, this);
+
+        if (numberOfFaces == 0) {
+            Toast.makeText(this, "No faces found", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, numberOfFaces + " faces found", Toast.LENGTH_SHORT).show();
+        }
 
         // Set the new bitmap to the ImageView
         mImageView.setImageBitmap(mResultsBitmap);
