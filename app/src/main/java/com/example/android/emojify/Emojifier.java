@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
+import com.google.android.gms.vision.face.Landmark;
 
 class Emojifier {
 
@@ -59,10 +60,42 @@ class Emojifier {
         }
 
         // TODO (2): Iterate through the faces, calling getClassifications() for each face.
+        for (int i = 0; i < faces.size(); ++i) {
+            Face face = faces.valueAt(i);
+            /*for (Landmark landmark : face.getLandmarks()) {
+                int cx = (int) (landmark.getPosition().x * scale);
+                int cy = (int) (landmark.getPosition().y * scale);
+                canvas.drawCircle(cx, cy, 10, paint);
+            }*/
+
+            getClassification(face);
+        }
+
+
 
         // Release the detector
         detector.release();
     }
 
     // TODO (1): Create a static method called getClassifications() which logs the probability of each eye being open and that the person is smiling.
+    static void getClassification(Face face) {
+        for(Landmark landmark: face.getLandmarks()) {
+            switch (landmark.getType()) {
+                case 4:
+                    Log.d(LOG_TAG, "Left Eye");
+                    break;
+                case 10:
+                    Log.d(LOG_TAG, "Right Eye");
+                    break;
+                case 5:
+                case 6:
+                case 11:
+                    Log.d(LOG_TAG, landmark.getType() + " Smiling");
+                    break;
+            }
+        };
+        Log.d(LOG_TAG, face.getIsLeftEyeOpenProbability() + " Left Open");
+        Log.d(LOG_TAG, face.getIsRightEyeOpenProbability() + " Right Open");
+        Log.d(LOG_TAG, face.getIsSmilingProbability() + " Is Smiling");
+    }
 }
